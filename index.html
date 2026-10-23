@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TicketFlow — Admin Paneli</title>
+<style>
+:root{--bg:#f6f7fb;--card:#fff;--text:#171827;--muted:#777d91;--line:#eceef4;--primary:#5b50e6;--primary-soft:#efeeff;--green:#16866a;--green-soft:#e7f7f0;--amber:#b97812;--amber-soft:#fff5df;--red:#c74455;--red-soft:#ffedf0;--shadow:0 8px 28px rgba(31,35,70,.045)}*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--text)}button,input,select,textarea{font:inherit}button{cursor:pointer}.app{display:flex;min-height:100vh}.sidebar{width:250px;background:#fff;border-right:1px solid var(--line);padding:24px 16px;position:fixed;inset:0 auto 0 0;display:flex;flex-direction:column;z-index:5}.brand{display:flex;gap:11px;align-items:center;padding:2px 10px 28px}.brandmark{width:39px;height:39px;border-radius:13px;background:linear-gradient(135deg,#756af8,#4b3bd0);color:white;display:grid;place-items:center;font-weight:800;font-size:19px;box-shadow:0 6px 15px #5b50e633}.brand strong{display:block;font-size:15px;letter-spacing:.1px}.brand small{color:var(--muted);font-size:11px}.navlabel{font-size:10px;letter-spacing:1.5px;color:#a0a4b4;font-weight:800;padding:8px 12px 10px}.nav{display:grid;gap:5px}.nav button{border:0;background:transparent;color:#777d91;text-align:left;padding:12px 13px;border-radius:11px;display:flex;align-items:center;gap:12px;font-size:13px;font-weight:600}.nav button:hover{background:#f7f7fc;color:var(--text)}.nav button.active{background:var(--primary-soft);color:var(--primary)}.ico{width:19px;text-align:center;font-size:17px}.sidebottom{margin-top:auto}.support{background:#f8f8ff;border:1px solid #eeedff;border-radius:14px;padding:14px;margin:14px 4px}.support b{font-size:12px}.support p{font-size:11px;color:var(--muted);line-height:1.5;margin:7px 0 12px}.support button{border:0;border-radius:8px;background:#fff;color:var(--primary);font-size:11px;font-weight:700;padding:8px 10px}.profile{display:flex;align-items:center;gap:10px;border-top:1px solid var(--line);padding:18px 8px 0}.avatar{width:35px;height:35px;border-radius:50%;background:#e8e6ff;color:var(--primary);display:grid;place-items:center;font-weight:800;font-size:12px}.profile b{font-size:12px;display:block}.profile small{font-size:10px;color:var(--muted)}main{margin-left:250px;width:calc(100% - 250px);padding:26px 32px 42px;max-width:1700px}.topbar{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:30px}.crumb{font-size:12px;color:var(--muted);margin-bottom:6px}.topbar h1{font-size:25px;letter-spacing:-.7px;margin:0}.topright{display:flex;align-items:center;gap:10px}.search{position:relative}.search input{width:220px;border:1px solid var(--line);background:white;padding:11px 12px 11px 36px;border-radius:11px;outline:none;font-size:12px}.search span{position:absolute;left:12px;top:8px;color:#9da2b2}.iconbtn{width:39px;height:39px;border:1px solid var(--line);border-radius:11px;background:white;color:#666d81;position:relative}.dot{position:absolute;right:8px;top:7px;width:6px;height:6px;border-radius:50%;background:#f07885}.primary{background:var(--primary);color:white;border:0;border-radius:10px;padding:11px 15px;font-size:12px;font-weight:700;box-shadow:0 5px 12px #5b50e626}.primary:hover{background:#4a40cf}.secondary{border:1px solid var(--line);background:#fff;color:#555b70;border-radius:10px;padding:10px 13px;font-size:12px;font-weight:700}.welcome{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;gap:16px}.welcome h2{font-size:17px;margin:0 0 5px}.welcome p{font-size:12px;color:var(--muted);margin:0}.datepill{font-size:11px;color:#646a7e;background:#fff;border:1px solid var(--line);padding:10px 13px;border-radius:10px;white-space:nowrap}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px;margin-bottom:22px}.stat{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:19px;box-shadow:var(--shadow)}.stathead{display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:11px;font-weight:650}.staticon{width:35px;height:35px;border-radius:11px;background:var(--primary-soft);display:grid;place-items:center;color:var(--primary);font-size:17px}.stat:nth-child(2) .staticon{background:var(--green-soft);color:var(--green)}.stat:nth-child(3) .staticon{background:var(--amber-soft);color:var(--amber)}.stat:nth-child(4) .staticon{background:#eaf4ff;color:#3477c8}.stat h3{font-size:25px;letter-spacing:-.7px;margin:14px 0 8px}.trend{font-size:10px;color:var(--green);font-weight:700}.trend span{color:var(--muted);font-weight:500;margin-left:4px}.contentgrid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(280px,1fr);gap:18px;margin-bottom:20px}.panel{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);min-width:0}.panelhead{display:flex;align-items:center;justify-content:space-between;padding:19px 20px;border-bottom:1px solid var(--line);gap:12px}.panelhead h3{font-size:13px;margin:0 0 4px}.panelhead p{font-size:10px;color:var(--muted);margin:0}.select{border:1px solid var(--line);background:#fff;border-radius:8px;padding:8px 10px;color:#697085;font-size:10px;outline:none}.chartarea{padding:20px;height:245px}.chartlabels{display:flex;justify-content:space-between;color:#9da2b1;font-size:10px;margin-top:8px}.bars{height:185px;display:flex;align-items:end;justify-content:space-around;gap:13px;border-bottom:1px solid var(--line);padding:0 5px;position:relative;background:repeating-linear-gradient(to bottom,transparent 0,transparent 44px,#f0f1f6 45px)}.barcol{height:100%;flex:1;display:flex;align-items:end;justify-content:center;gap:4px;position:relative}.bar{width:13px;max-width:34%;border-radius:5px 5px 0 0;background:#d8d5ff}.bar.dark{background:var(--primary)}.bar.alt{background:#aaa3ff}.barcol:hover .bar{filter:brightness(.95)}.eventlist{padding:4px 18px 13px}.eventrow{display:flex;align-items:center;gap:11px;padding:13px 0;border-bottom:1px solid #f1f2f6}.eventrow:last-child{border-bottom:0}.eventdate{width:42px;height:45px;background:#f0efff;border-radius:10px;display:grid;align-content:center;text-align:center;flex-shrink:0}.eventdate b{font-size:15px;color:var(--primary);line-height:1.2}.eventdate small{font-size:9px;color:var(--primary);text-transform:uppercase}.eventinfo{flex:1;min-width:0}.eventinfo b{font-size:11px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.eventinfo small{font-size:10px;color:var(--muted);display:block;margin-top:5px}.mini-progress{height:4px;background:#f0f1f5;border-radius:5px;margin-top:7px;overflow:hidden}.mini-progress i{display:block;height:100%;background:var(--primary);border-radius:5px}.eventnum{font-size:10px;color:#73798c;text-align:right;white-space:nowrap}.tablepanel{overflow:hidden}.tabletools{display:flex;align-items:center;gap:8px}.tablewrap{overflow:auto}table{border-collapse:collapse;width:100%;min-width:720px}th{text-align:left;font-size:10px;color:#969bad;font-weight:700;background:#fcfcfe;padding:13px 20px;white-space:nowrap}td{padding:15px 20px;border-top:1px solid #f0f1f5;font-size:11px;color:#545a6e;white-space:nowrap}td b{color:var(--text);font-size:11px}.customer{display:flex;align-items:center;gap:9px}.tinyavatar{width:30px;height:30px;border-radius:10px;background:#f0efff;color:var(--primary);display:grid;place-items:center;font-size:10px;font-weight:800}.subtext{display:block;font-size:9px;color:#999eaf;margin-top:4px}.status{display:inline-flex;align-items:center;gap:5px;padding:6px 8px;border-radius:7px;font-size:9px;font-weight:750}.status:before{content:"";width:5px;height:5px;border-radius:50%;background:currentColor}.pending{background:var(--amber-soft);color:var(--amber)}.paid{background:var(--green-soft);color:var(--green)}.rejected{background:var(--red-soft);color:var(--red)}.expired{background:#f0f1f5;color:#73798c}.linkbtn{border:0;background:transparent;color:var(--primary);font-size:10px;font-weight:750;padding:5px}.page{display:none}.page.active{display:block}.empty{padding:45px 20px;text-align:center;color:var(--muted);font-size:12px}.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}.toolbar input,.toolbar select{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:white;font-size:12px;outline:none}.toolbar input{min-width:200px}.toast{position:fixed;right:22px;bottom:22px;background:#1c2032;color:white;border-radius:12px;padding:13px 17px;font-size:12px;box-shadow:0 10px 35px #0002;display:none;z-index:30}.modalback{position:fixed;inset:0;background:#17182766;display:none;align-items:center;justify-content:center;padding:20px;z-index:20}.modalback.show{display:flex}.modal{width:min(520px,100%);background:white;border-radius:18px;padding:24px;box-shadow:0 25px 80px #1113;max-height:90vh;overflow:auto}.modalhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}.modalhead h3{margin:0;font-size:17px}.close{border:0;background:#f4f5f8;border-radius:9px;width:32px;height:32px}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:13px}.field{display:grid;gap:6px}.field.full{grid-column:1/-1}.field label{font-size:11px;color:#656b7e;font-weight:700}.field input,.field select,.field textarea{border:1px solid #e5e7ef;border-radius:9px;padding:11px;font-size:12px;outline:none;width:100%}.field input:focus,.field select:focus{border-color:#aaa4ff;box-shadow:0 0 0 3px #efeeff}.modalactions{display:flex;justify-content:flex-end;gap:8px;margin-top:20px}.notice{padding:13px 15px;background:#fff8e8;border:1px solid #f8e8be;border-radius:11px;color:#8b641d;font-size:11px;line-height:1.5;margin-bottom:17px}.settingsgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.settingscard{padding:20px}.settingscard h3{font-size:13px;margin:0 0 7px}.settingscard p{font-size:11px;color:var(--muted);line-height:1.6}
+/* Receipt viewer */
+.receipt-viewer{width:min(640px,100%)}.receipt-meta{font-size:12px;color:var(--muted);line-height:1.7;margin-bottom:14px}.receipt-img-wrap{background:#f8f8fc;border:1px solid var(--line);border-radius:14px;padding:12px;text-align:center;max-height:55vh;overflow:auto}.receipt-img-wrap img{max-width:100%;border-radius:10px;box-shadow:0 8px 24px #0001}.receipt-filename{margin-top:10px;font-size:11px;color:var(--muted)}.no-receipt{padding:30px;text-align:center;color:var(--muted);font-size:12px}
+.mobiletop{display:none}
+@media(max-width:1100px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.contentgrid{grid-template-columns:1fr}.search input{width:180px}}
+@media(max-width:760px){.sidebar{width:72px;padding:20px 9px}.brand{padding:0 7px 25px}.brandtext,.navlabel,.nav button .navtext,.support,.profile .proftext{display:none}.brandmark{width:42px;height:42px}.nav button{justify-content:center;padding:13px 5px}.ico{font-size:19px}.profile{justify-content:center;padding:15px 0 0}.app main{margin-left:72px;width:calc(100% - 72px);padding:22px 15px}.topbar{align-items:flex-start}.topbar h1{font-size:21px}.topright .search{display:none}.topright .primary{padding:10px;font-size:11px}.topright .iconbtn{display:none}.welcome{align-items:flex-start;flex-direction:column}.stats{gap:10px}.stat{padding:14px}.stat h3{font-size:22px}.stathead{font-size:10px}.staticon{width:30px;height:30px}.settingsgrid{grid-template-columns:1fr}.formgrid{grid-template-columns:1fr}.field.full{grid-column:auto}.panelhead{padding:16px}.tabletools .select{max-width:100px}.chartarea{padding:15px 12px}.bars{gap:5px}.bar{width:9px}}
+/* Demo login gate */
+#loginScreen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:radial-gradient(circle at top left,#eeecff 0,transparent 38%),var(--bg)}
+.login-card{width:min(420px,100%);background:#fff;border:1px solid var(--line);border-radius:22px;padding:32px;box-shadow:0 24px 70px #25215c12}
+.login-brand{display:flex;align-items:center;gap:12px;margin-bottom:28px}.login-brand .brandmark{width:48px;height:48px}.login-card h1{font-size:24px;letter-spacing:-.6px;margin:0 0 8px}.login-card p{font-size:12px;color:var(--muted);line-height:1.6;margin:0 0 22px}.login-field{display:grid;gap:7px;margin:14px 0}.login-field label{font-size:11px;font-weight:700;color:#656b7e}.login-field input{border:1px solid #e5e7ef;border-radius:10px;padding:13px;font-size:13px;width:100%;outline:none}.login-field input:focus{border-color:#aaa4ff;box-shadow:0 0 0 3px #efeeff}.login-submit{width:100%;padding:13px;margin-top:8px}.login-error{display:none;color:var(--red);font-size:11px;margin:10px 0 0}.login-hint{margin-top:18px;padding:12px;background:#f8f8ff;border:1px solid #eeedff;border-radius:10px;color:#686d83;font-size:11px;line-height:1.6}.logout-btn{border:1px solid var(--line);background:#fff;color:#646a7e;border-radius:10px;padding:10px 12px;font-size:11px;font-weight:700}
+body:not(.authenticated) .app{display:none}body.authenticated #loginScreen{display:none}
+@media(max-width:520px){.login-card{padding:24px}}
+</style>
+<style>@media(max-width:760px){.modal{padding:17px;max-height:88dvh}.modalactions{gap:9px}.modalactions button{min-width:0}.field textarea{resize:vertical}}.field small{font-size:10px;color:#777d91}</style><style>
+/* Compact event editor only; other dialogs unchanged */
+#modalback{padding:12px}
+#modalback>.modal{width:min(580px,100%);max-height:min(690px,94dvh);padding:0;display:flex;flex-direction:column;border-radius:16px;overflow:hidden}
+#modalback .modalhead{padding:15px 19px;margin:0;border-bottom:1px solid var(--line);flex-shrink:0}
+#modalback .modalhead h3{font-size:15px}
+#eventForm{display:flex;flex-direction:column;min-height:0;flex:1}
+#eventForm>.formgrid{overflow-y:auto;min-height:0;padding:17px 19px;gap:11px 13px;align-content:start}
+#eventForm .field{gap:5px;min-width:0}
+#eventForm .field input,#eventForm .field select,#eventForm .field textarea{padding:9px 10px;font-size:12px;min-height:37px}
+#eventForm .field textarea{min-height:65px;resize:vertical}
+#eventForm .modalactions{margin:0;padding:12px 19px;border-top:1px solid var(--line);background:white;flex-shrink:0}
+#eventForm .modalactions button{padding:10px 12px}
+#eventForm .media-section{grid-column:1/-1;border:1px solid var(--line);border-radius:11px;overflow:hidden;background:#fbfbfe}
+#eventForm .media-section summary{cursor:pointer;list-style:none;padding:11px 13px;font-size:12px;font-weight:750;display:flex;justify-content:space-between;gap:8px}
+#eventForm .media-section summary::-webkit-details-marker{display:none}
+#eventForm .media-section summary:before{content:'▸';color:var(--primary);margin-right:5px}
+#eventForm .media-section[open] summary:before{content:'▾'}
+#eventForm .media-section summary span{font-weight:500;font-size:10px;color:var(--muted)}
+#eventForm .media-fields{padding:12px;display:grid;gap:12px;border-top:1px solid var(--line)}
+#eventForm .media-fields input[type=file]{min-height:0;padding:7px;background:white;max-width:100%}
+@media(max-width:600px){#modalback{padding:8px}#modalback>.modal{max-height:94dvh;width:100%}#eventForm>.formgrid{padding:12px;gap:9px}#modalback .modalhead{padding:12px}#eventForm .modalactions{padding:10px 12px}#eventForm .formgrid{grid-template-columns:1fr 1fr}#eventForm .field.full,#eventForm .media-section{grid-column:1/-1}}
+/* Event editor: stable scroll on mobile and desktop, visible image uploads */
+#modalback {overflow-y:auto;overscroll-behavior:contain;align-items:center}
+#modalback>.modal {height:min(850px,calc(100dvh - 24px));max-height:calc(100dvh - 24px);min-height:0}
+#eventForm {overflow:hidden;min-height:0}
+#eventForm>.formgrid {flex:1 1 auto;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-gutter:stable;min-height:0}
+#eventForm .media-section {min-width:0;overflow:visible;border:1px solid #c9c6ff;background:#f7f6ff}
+#eventForm .media-section summary {color:#4438c7;align-items:center;flex-wrap:wrap}
+#eventForm .media-fields {min-width:0}
+#eventForm .media-fields input[type=file] {width:100%;min-width:0;font-size:12px;white-space:normal}
+#eventForm .modalactions {position:relative;z-index:1}
+@media(max-width:600px){
+ #modalback {padding:6px;align-items:center}
+ #modalback>.modal {height:calc(100dvh - 12px);max-height:calc(100dvh - 12px);width:100%;border-radius:12px}
+ #eventForm>.formgrid {grid-template-columns:minmax(0,1fr) minmax(0,1fr);padding:12px;scrollbar-gutter:auto}
+ #eventForm .media-section {grid-column:1/-1}
+ #eventForm .media-section summary span {display:block;width:100%}
+ #eventForm .modalactions {padding:10px 12px;padding-bottom:max(10px,env(safe-area-inset-bottom))}
+}
+</style><style>
+/* QR ticket extension */
+.tf-ticket-actions{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.tf-kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:15px 0}
+.tf-kpi{background:#fff;border:1px solid var(--line);border-radius:13px;padding:15px}
+.tf-kpi small{color:var(--muted);display:block;font-size:11px}.tf-kpi b{font-size:25px;display:block;margin-top:6px}
+.tf-ticket-section{padding:18px 20px;display:flex;align-items:center;gap:15px;flex-wrap:wrap}
+.tf-ticket-section label{font-size:12px;font-weight:650}
+.tf-ticket-section input[type=file]{font-size:12px;max-width:100%;width:220px}
+.tf-scanner-layout{display:grid;grid-template-columns:1.15fr 1fr;gap:18px}
+.tf-scanner-col{padding:18px;min-width:0}.tf-scanner-col h3{font-size:14px;margin:0 0 6px}.tf-scanner-col p{font-size:12px;color:var(--muted);line-height:1.6}
+#tfTicketScanner{width:100%;overflow:hidden;border-radius:12px;background:#f7f7fa;min-height:240px;display:grid;place-items:center}
+#tfTicketScanner:empty:before{content:'Kamera başlayanda görüntü burada görünəcək';font-size:12px;color:var(--muted);padding:20px;text-align:center}
+.tf-scan-result{min-height:68px;padding:15px;border:1px solid var(--line);border-radius:11px;font-size:12px;line-height:1.6;margin-top:15px;background:#f9f9fc}
+.tf-scan-result.success{background:var(--green-soft);color:#137052;border-color:#b7e3d1}
+.tf-scan-result.error{background:var(--red-soft);color:#a72e45;border-color:#f3bec9}
+.tf-ticket-modal{width:min(530px,100%);max-height:96dvh;display:flex;flex-direction:column;overflow:hidden}
+.tf-ticket-modal .modalhead{margin-bottom:8px;flex-shrink:0}
+.tf-ticket-image-box{overflow-y:auto;min-height:0;text-align:center;background:#f6f7fb;padding:8px;border-radius:10px}
+.tf-ticket-image-box canvas{max-width:min(100%,360px);height:auto;display:block;margin:0 auto;border:1px solid #ececec;box-shadow:0 7px 28px #0002}
+.tf-ticket-modal .modalactions{flex-shrink:0}
+#tfTicketTemplateStatus{font-size:11px;color:var(--muted)}
+@media(max-width:850px){.tf-scanner-layout{grid-template-columns:1fr}}
+@media(max-width:620px){.tf-kpis{gap:7px}.tf-kpi{padding:10px}.tf-kpi b{font-size:19px}.tf-scanner-col{padding:14px}}
+
+/* Mobile admin navigation: maintain the existing desktop sidebar and all routes. */
+.tf-mobile-toggle,.tf-mobile-backdrop{display:none}
+@media(max-width:760px){
+ .tf-mobile-toggle{display:grid;place-items:center;flex-shrink:0;width:40px;height:40px;border:1px solid var(--line);border-radius:10px;background:#fff;color:#4438c7;font-size:22px}
+ .sidebar{width:min(265px,85vw);padding:24px 16px;transform:translateX(-105%);transition:transform .22s ease;z-index:42;box-shadow:0 15px 55px #0001}
+ body.tf-mobile-open .sidebar{transform:translateX(0)}
+ .brandtext,.navlabel,.nav button .navtext,.support,.profile .proftext{display:block}
+ .brand{padding:2px 10px 28px}.nav button{justify-content:flex-start;padding:12px 13px}
+ .profile{justify-content:flex-start;padding:18px 8px 0}
+ .tf-mobile-backdrop{position:fixed;inset:0;background:rgba(25,28,44,.44);z-index:41}
+ body.tf-mobile-open .tf-mobile-backdrop{display:block}
+ .app main{margin-left:0;width:100%;padding:20px 14px 36px}
+ .topbar{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:10px;align-items:start;margin-bottom:22px}
+ .topbar h1{font-size:20px}.topright{gap:5px}.topright #topAdd{display:none!important}
+ .topright #logoutBtn{padding:9px 7px;font-size:10px}
+}
+@media(max-width:420px){.tf-kpis{grid-template-columns:repeat(3,minmax(0,1fr))}.tf-kpi b{font-size:17px}}
+@media(prefers-reduced-motion:reduce){.sidebar{transition:none}}
+</style></head>
+<body>
+<div id="loginScreen"><form class="login-card" id="loginForm"><div class="login-brand"><div class="brandmark">T</div><div><strong style="font-size:15px;display:block">TicketFlow</strong><small style="font-size:10px;color:var(--muted)">ADMIN PANEL · FIREBASE</small></div></div><h1>Admin giriş</h1><p>İdarəetmə panelinə daxil olmaq üçün Firebase Authentication hesabınla daxil ol.</p><div class="login-field"><label for="loginUsername">Admin e-poçtu</label><input id="loginUsername" type="email" autocomplete="username" required placeholder="İstifadəçi adı"></div><div class="login-field"><label for="loginPassword">Şifrə</label><input id="loginPassword" type="password" autocomplete="current-password" required placeholder="Şifrə"></div><div class="login-error" id="loginError">İstifadəçi adı və ya şifrə yanlışdır.</div><button class="primary login-submit" type="submit">Daxil ol →</button><div class="login-hint"><b>Firebase admin hesabı</b><br><span>Firebase Authentication e-poçtu və şifrəsi ilə daxil olun. Admin UID-si tfAdmins kolleksiyasında olmalıdır.</span></div></form></div>
+<div id="tfMobileBackdrop" class="tf-mobile-backdrop" aria-hidden="true"></div>
+<div class="app">
+<aside class="sidebar"><div class="brand"><div class="brandmark">T</div><div class="brandtext"><strong>TicketFlow</strong><small>EVENT MANAGEMENT</small></div></div><div class="navlabel">İDARƏETMƏ</div><nav class="nav" id="nav"><button class="active" data-page="dashboard"><span class="ico">◫</span><span class="navtext">Dashboard</span></button><button data-page="events"><span class="ico">▦</span><span class="navtext">Tədbirlər</span></button><button data-page="orders"><span class="ico">▤</span><span class="navtext">Sifarişlər</span></button><button data-page="payments"><span class="ico">◈</span><span class="navtext">Ödəniş yoxlaması</span></button><button data-page="tickets"><span class="ico">▣</span><span class="navtext">Biletlər</span></button><button data-page="scan"><span class="ico">▦</span><span class="navtext">QR yoxlama</span></button><button data-page="finance"><span class="ico">↗</span><span class="navtext">Maliyyə</span></button></nav><div class="sidebottom"><div class="support"><b>Başlamağa hazırsan?</b><p>Firebase qoşulduqdan sonra məlumatlar canlı yenilənəcək.</p><button data-goto="settings">Quraşdırmanı gör →</button></div><div class="navlabel">SİSTEM</div><nav class="nav"><button data-page="settings"><span class="ico">⚙</span><span class="navtext">Parametrlər</span></button></nav><div class="profile"><div class="avatar">SA</div><div class="proftext"><b>Super Admin</b><small>Firebase rejimi</small></div></div></div></aside>
+<main><header class="topbar"><button type="button" class="tf-mobile-toggle" id="tfMobileMenuToggle" aria-label="Menyunu aç" aria-controls="nav" aria-expanded="false">☰</button><div><div class="crumb">İdarəetmə mərkəzi / <span id="crumb">Dashboard</span></div><h1 id="pageTitle">Dashboard</h1></div><div class="topright"><label class="search"><span>⌕</span><input id="globalSearch" placeholder="Sifariş, tədbir axtar..." aria-label="Axtarış"></label><button class="iconbtn" title="Bildirişlər">♧<i class="dot"></i></button><button class="logout-btn" id="logoutBtn" type="button">Çıxış ↗</button><button class="primary" id="topAdd">＋ Yeni tədbir</button></div></header>
+<section class="page active" id="page-dashboard"><div class="welcome"><div><h2>Xoş gəldin! 👋</h2><p>Bilet satış sisteminin bugünkü vəziyyətinə ümumi baxış.</p></div><div class="datepill" id="todayLabel">Bugünkü göstəricilər</div></div><div class="notice"><b>Firebase məlumatları aktivdir.</b> Sifarişlər və tədbirlər Firestore üzərindən yenilənir.</div><div class="stats"><article class="stat"><div class="stathead">Ümumi satış gəliri <span class="staticon">↗</span></div><h3 id="statRevenue">₼ 1,284.00</h3><div class="trend">↑ 12.8% <span>əvvəlki dövrlə müqayisədə</span></div></article><article class="stat"><div class="stathead">Satılmış biletlər <span class="staticon">▣</span></div><h3 id="statTickets">86</h3><div class="trend">↑ 8.2% <span>ümumi təsdiqlənmiş bilet</span></div></article><article class="stat"><div class="stathead">Ödəniş gözləyir <span class="staticon">◷</span></div><h3 id="statPending">7</h3><div class="trend" style="color:var(--amber)">Yoxlama tələb olunur</div></article><article class="stat"><div class="stathead">Aktiv tədbirlər <span class="staticon">▦</span></div><h3 id="statEvents">4</h3><div class="trend"><span>Satışda olan tədbirlər</span></div></article></div>
+<div class="contentgrid"><article class="panel"><div class="panelhead"><div><h3>Satış statistikası</h3><p>Son 7 gün üzrə təsdiqlənmiş gəlir</p></div><select class="select" id="chartRange"><option value="7">Son 7 gün</option><option value="30">Son 30 gün</option></select></div><div class="chartarea"><div class="bars" id="bars"></div><div class="chartlabels" id="chartlabels"></div></div></article><article class="panel"><div class="panelhead"><div><h3>Yaxınlaşan tədbirlər</h3><p>Satışda olan tədbirlər</p></div><button class="linkbtn" data-goto="events">Hamısı →</button></div><div class="eventlist" id="upcomingList"></div></article></div>
+<article class="panel tablepanel"><div class="panelhead"><div><h3>Son sifarişlər</h3><p>Ən son yaradılan sifarişlər</p></div><button class="linkbtn" data-goto="orders">Bütün sifarişlər →</button></div><div class="tablewrap"><table><thead><tr><th>SİFARİŞ</th><th>MÜŞTƏRİ</th><th>TƏDBİR</th><th>MƏBLƏĞ</th><th>STATUS</th><th>ƏMƏLİYYAT</th></tr></thead><tbody id="recentOrders"></tbody></table></div></article></section>
+<section class="page" id="page-events"><div class="toolbar"><input id="eventSearch" placeholder="Tədbir axtar..."><select id="eventStatusFilter"><option value="all">Bütün statuslar</option><option value="Satışda">Satışda</option><option value="Qaralama">Qaralama</option><option value="Bitib">Bitib</option></select><button class="primary" id="addEvent">＋ Tədbir yarat</button></div><article class="panel tablepanel"><div class="tablewrap"><table><thead><tr><th>TƏDBİR</th><th>TARİX</th><th>MƏKAN</th><th>QİYMƏT</th><th>BİLET SATIŞI</th><th>STATUS</th><th>ƏMƏLİYYAT</th></tr></thead><tbody id="eventsTable"></tbody></table></div></article></section>
+<section class="page" id="page-orders"><div class="toolbar"><input id="orderSearch" placeholder="Sifariş nömrəsi və ya müştəri..."><select id="orderStatusFilter"><option value="all">Bütün statuslar</option><option value="Gözləyir">Ödəniş gözləyir</option><option value="Təsdiqlənib">Təsdiqlənib</option><option value="Rədd edilib">Rədd edilib</option><option value="Müddəti bitib">Müddəti bitib</option></select></div><article class="panel tablepanel"><div class="tablewrap"><table><thead><tr><th>SİFARİŞ</th><th>MÜŞTƏRİ</th><th>TƏDBİR</th><th>BİLET</th><th>MƏBLƏĞ</th><th>REZERVASİYA</th><th>STATUS</th><th>ƏMƏLİYYAT</th></tr></thead><tbody id="ordersTable"></tbody></table></div></article></section>
+<section class="page" id="page-payments"><div class="notice"><b>Card-to-card qaydası:</b> qəbz məcburidir. Qəbz şəkli ödənişin sübutu kimi nəzərdən keçirilir, lakin təsdiq yalnız bank hesabında məbləğ yoxlanandan sonra verilməlidir.</div><div class="toolbar"><select id="paymentFilter"><option value="all">Bütün ödənişlər</option><option value="Gözləyir">Yoxlama gözləyir</option><option value="Təsdiqlənib">Təsdiqlənib</option><option value="Rədd edilib">Rədd edilib</option></select></div><article class="panel tablepanel"><div class="tablewrap"><table><thead><tr><th>SİFARİŞ</th><th>MÜŞTƏRİ</th><th>MƏBLƏĞ</th><th>QƏBZ</th><th>STATUS</th><th>YOXLAMA</th></tr></thead><tbody id="paymentsTable"></tbody></table></div></article></section>
+<section class="page" id="page-tickets">
+<div class="notice"><b>Elektron biletlər:</b> admin təsdiqi ilə QR bilet qeydləri eyni Firestore tranzaksiyasında yaranır. Bilet şəkli şablon və məlumatlar əsasında göstərilərkən hazırlanır; PNG olaraq endirilə bilər. Köhnə sifarişlərdə çatışmayan bilet qeydlərini admin sinxronlaşdıra bilər.</div>
+<div class="tf-kpis"><div class="tf-kpi"><small>Ümumi biletlər</small><b id="tfTicketTotal">0</b></div><div class="tf-kpi"><small>Aktiv biletlər</small><b id="tfTicketAvailable">0</b></div><div class="tf-kpi"><small>Giriş edilib</small><b id="tfTicketEntered">0</b></div></div>
+<div class="toolbar"><input id="ticketSearch" placeholder="Bilet, sifariş və ya alıcı axtar..."><button type="button" class="primary" id="tfTicketSync">Biletləri sinxronlaşdır</button><button type="button" class="secondary" data-goto="scan">▣ QR yoxlama</button></div>
+<article class="panel"><div class="panelhead"><div><h3>Bilet şablonu</h3><p>Göndərdiyin sarı-ağ bilet dizaynı əsas şablon kimi istifadə olunur.</p></div><button class="secondary" id="tfTicketDemo" type="button">Nümunəni göstər</button></div>
+<div class="tf-ticket-section"><label for="tfTicketTemplateUpload">Şablonu dəyiş:</label><input type="file" id="tfTicketTemplateUpload" accept="image/png,image/jpeg,image/webp"><button type="button" class="secondary" id="tfTicketTemplateSave">Şablonu yadda saxla</button><span id="tfTicketTemplateStatus">Standart şablon: assets/ticket.jpg</span></div></article>
+<div class="panel tablepanel" style="margin-top:15px"><div class="panelhead"><div><h3>Təsdiqlənmiş biletlər</h3><p id="tfTicketBridgeStatus">Firebase bilet bağlantısı gözlənilir</p></div></div><div class="tablewrap"><table><thead><tr><th>BİLET ID</th><th>SİFARİŞ</th><th>TƏDBİR</th><th>ALICI</th><th>STATUS</th><th>ƏMƏLİYYAT</th></tr></thead><tbody id="ticketsTable"></tbody></table></div></div></section>
+<section class="page" id="page-scan">
+<div class="notice"><b>Giriş yoxlaması:</b> bileti yalnız admin yoxlayır. QR oxudulduqda məlumat yoxlanılır, sonra “Girişi təsdiqlə” əməliyyatı bileti birdəfəlik istifadə olunmuş kimi qeyd edir. Kamera üçün HTTPS və icazə lazımdır.</div>
+<div class="tf-scanner-layout">
+<article class="panel tf-scanner-col"><h3>Kamera ilə QR skan et</h3><p>Telefonun arxa kamerasını QR koduna tut.</p><div id="tfTicketScanner"></div><div class="tf-ticket-actions" style="margin-top:13px"><button class="primary" id="tfScanStart" type="button">Kameranı aç</button><button class="secondary" id="tfScanStop" type="button" hidden>Kameranı bağla</button></div></article>
+<article class="panel tf-scanner-col"><h3>Əl ilə bilet yoxla</h3><p>QR oxunmadıqda unikal bilet nömrəsini daxil et.</p><form id="tfTicketScanForm"><div class="field"><label for="tfTicketScanInput">Bilet nömrəsi</label><input id="tfTicketScanInput" placeholder="Məs: TK-TF-2083-1" required autocomplete="off"></div><button type="submit" class="primary" style="margin-top:10px">Bileti yoxla</button></form><div class="tf-scan-result" id="tfTicketScanResult">Biletin məlumatları yoxlamadan sonra burada göstəriləcək.</div><button type="button" class="primary" id="tfTicketCheckInBtn" style="margin-top:12px" hidden>Girişi təsdiqlə</button></article>
+</div></section>
+<section class="page" id="page-finance"><div class="stats"><article class="stat"><div class="stathead">Təsdiqlənmiş satış <span class="staticon">↗</span></div><h3 id="financeGross">₼ 0.00</h3><div class="trend"><span>Yalnız təsdiqlənmiş sifarişlər</span></div></article><article class="stat"><div class="stathead">Qeyd edilmiş xərclər <span class="staticon">↘</span></div><h3 id="financeExpenses">₼ 0.00</h3><div class="trend"><span>Qeyd edilmiş xərclər</span></div></article><article class="stat"><div class="stathead">Təxmini nəticə <span class="staticon">◈</span></div><h3 id="financeProfit">₼ 0.00</h3><div class="trend"><span>Satış minus xərclər</span></div></article><article class="stat"><div class="stathead">Gözləyən məbləğ <span class="staticon">◷</span></div><h3 id="financePending">₼ 0.00</h3><div class="trend"><span>Hələ təsdiqlənməyib</span></div></article></div><article class="panel"><div class="panelhead"><div><h3>Xərclər</h3><p>Tədbir xərclərini qeyd etmək üçün demo bölmə</p></div><button class="primary" id="addExpense">＋ Xərc əlavə et</button></div><div class="tablewrap"><table><thead><tr><th>XƏRC</th><th>TƏDBİR</th><th>MƏBLƏĞ</th><th>TARİX</th><th></th></tr></thead><tbody id="expensesTable"></tbody></table></div></article></section>
+<section class="page" id="page-settings"><div class="notice"><b>Firebase bağlantısı aktivdir.</b> Kart məlumatları Firebase parametrlərindən idarə olunur. Real kart məlumatları və konfiqurasiya əlavə olunanda yalnız səlahiyyətli adminlər dəyişiklik edə bilməlidir.</div><div class="settingsgrid"><article class="panel settingscard"><h3>Ödəniş qaydaları</h3><p>Card-to-card ödəniş və rezervasiya siyasəti.</p><div class="field"><label>Rezervasiya müddəti</label><input value="30 dəqiqə" disabled></div><div class="field" style="margin-top:12px"><label>Qəbz yüklənməsi</label><input value="Məcburidir" disabled></div><div class="field" style="margin-top:12px"><label>Təsdiq üsulu</label><input value="Admin tərəfindən manual yoxlama" disabled></div></article><article class="panel settingscard"><h3>Firebase inteqrasiyası</h3><p>Mövcud gunelsstory-6d3a9 layihəsinə qoşulub. Şəkillər Firestore-da sıxılmış WebP olaraq saxlanır.</p><span class="status pending">Firebase rejimi</span></article><article class="panel settingscard"><h3>Ödəniş kartı</h3><p>İstifadəçilərə görünəcək kart məlumatları.</p><form id="paymentCardForm"><div class="field"><label>Kart nömrəsi</label><input name="cardNumber" required minlength="12" maxlength="24" placeholder="0000 0000 0000 0000"></div><div class="field" style="margin-top:10px"><label>Kart sahibi</label><input name="cardHolder" required placeholder="Ad Soyad"></div><button class="primary" style="margin-top:12px" type="submit">Kartı yadda saxla</button></form></article><article class="panel settingscard"><h3>Bilet siyasəti</h3><p>Ödəniş təsdiqlənmədən bilet aktiv olmur. QR kod unikal olmalı və girişdə server tərəfdə bir dəfə istifadə qaydası yoxlanmalıdır.</p></article><article class="panel settingscard"><h3>Admin təhlükəsizliyi</h3><p>Admin rolları Firebase Authentication və Firestore Security Rules ilə qorunacaq. Məxfi service account açarları brauzer koduna yazılmayacaq.</p></article></div></section>
+</main></div>
+
+<!-- Event modal -->
+<div class="modalback" id="modalback"><div class="modal"><div class="modalhead"><h3 id="modalTitle">Yeni tədbir</h3><button class="close" id="modalClose">✕</button></div><form id="eventForm"><div class="formgrid"><div class="field full"><label>Tədbirin adı *</label><input name="name" required placeholder="Məsələn, Halloween sehrbaz şousu"></div><div class="field"><label>Tarix *</label><input name="date" type="date" required></div><div class="field"><label>Saat</label><input name="time" type="time" value="15:00"></div><div class="field"><label>Məkan</label><input name="venue" placeholder="Restoran / zal"></div><div class="field"><label>Bilet qiyməti (₼) *</label><input name="price" type="number" min="0" step="0.01" required placeholder="22"></div><div class="field"><label>Bilet limiti *</label><input name="capacity" type="number" min="1" required placeholder="100"></div><details class="media-section" open><summary>Şəkillər və bannerlər <span>4 şəkil · aç / bağla</span></summary><div class="media-fields"><div class="field full"><label>Kart afişası (JPG/PNG/WebP)</label><input name="posterFile" type="file" accept="image/png,image/jpeg,image/webp"><small>Mobil və masaüstü tədbir kartları üçün · 8 MB-a qədər (avtomatik sıxılır)</small></div><div class="field full"><label>Ətraflı səhifənin banneri</label><input name="detailFile" type="file" accept="image/png,image/jpeg,image/webp"></div><div class="field full"><label>Əsas səhifədə seçilmiş tədbir banneri</label><input name="heroFile" type="file" accept="image/png,image/jpeg,image/webp"></div><div class="field full"><label>Sağdakı “TicketFlow xüsusi” banner şəkli</label><input name="specialFile" type="file" accept="image/png,image/jpeg,image/webp"><small>8 MB-a qədər. Seçilmiş tədbirin yanında görünür.</small></div></div></details><div class="field"><label>Seçilmiş tədbir kimi göstər</label><select name="featured"><option value="no">Xeyr</option><option value="yes">Bəli</option></select></div><div class="field full"><label>Tədbir haqqında</label><textarea name="description" rows="3" placeholder="Tədbirin təsviri"></textarea></div><div class="field"><label>Status</label><select name="status"><option>Satışda</option><option>Qaralama</option><option>Bitib</option></select></div></div><div class="modalactions"><button type="button" class="secondary" id="cancelModal">Ləğv et</button><button class="primary" type="submit">Tədbiri yadda saxla</button></div></form></div></div>
+
+<!-- Expense modal -->
+<div class="modalback" id="expenseModal"><div class="modal"><div class="modalhead"><h3>Xərc əlavə et</h3><button class="close" id="expenseClose">✕</button></div><form id="expenseForm"><div class="formgrid"><div class="field full"><label>Xərcin adı *</label><input name="name" required placeholder="Məsələn, zal icarəsi"></div><div class="field"><label>Məbləğ (₼) *</label><input name="amount" type="number" min="0" step="0.01" required></div><div class="field"><label>Tarix</label><input name="date" type="date" required></div><div class="field full"><label>Tədbir</label><select name="eventId" id="expenseEvent"></select></div></div><div class="modalactions"><button type="button" class="secondary" id="expenseCancel">Ləğv et</button><button class="primary" type="submit">Yadda saxla</button></div></form></div></div>
+
+<!-- Receipt viewer modal -->
+<div class="modalback" id="receiptModal"><div class="modal receipt-viewer"><div class="modalhead"><h3 id="receiptModalTitle">Ödəniş qəbzi</h3><button class="close" id="receiptModalClose">✕</button></div><div id="receiptModalBody"></div><div class="modalactions"><button type="button" class="secondary" id="receiptModalClose2">Bağla</button></div></div></div>
+
+<!-- Order detail modal -->
+<div class="modalback" id="orderModal"><div class="modal"><div class="modalhead"><h3 id="orderModalTitle">Sifariş detalı</h3><button class="close" id="orderModalClose">✕</button></div><div id="orderModalBody"></div><div class="modalactions" id="orderModalActions"></div></div></div>
+
+<div class="modalback" id="tfTicketPreviewModal"><div class="modal tf-ticket-modal"><div class="modalhead"><div><h3 id="tfTicketPreviewTitle">Bilet</h3><small id="tfTicketPreviewCaption" style="color:var(--muted)"></small></div><button class="close" id="tfTicketPreviewClose" type="button">✕</button></div><div class="tf-ticket-image-box" id="tfTicketCanvasBox"></div><div class="modalactions"><button type="button" class="secondary" id="tfTicketPreviewClose2">Bağla</button><button type="button" class="primary" id="tfTicketDownload">PNG yüklə</button></div></div></div>
+<div class="toast" id="toast"></div>
+<script>
+const loginForm=document.getElementById('loginForm');
+loginForm.addEventListener('submit',async e=>{e.preventDefault();const email=document.getElementById('loginUsername').value.trim(),pass=document.getElementById('loginPassword').value;try{if(!window.TFAdmin)throw Error('Firebase modulu yüklənmədi. Saytı HTTPS ünvanında açın və internet bağlantısını yoxlayın.');await window.TFAdmin.login(email,pass);document.getElementById('loginError').style.display='none'}catch(err){document.getElementById('loginError').textContent=window.TFAdmin?.error?.(err)||err.message||String(err);document.getElementById('loginError').style.display='block'}});
+document.getElementById('logoutBtn').addEventListener('click',()=>window.TFAdmin?.logout?.());
+const KEY='ticketflow_admin_demo_v1';
+const seed={events:[
+{id:'EV-101',name:'Halloween sehrbaz şousu',date:'2026-10-24',time:'15:00',venue:'Cactus restoranı',price:22,capacity:100,status:'Satışda',sold:42,category:'Əyləncə',description:'Balacalar və ailələr üçün sehr, oyunlar və bol əyləncə ilə dolu xüsusi tədbir.'},
+{id:'EV-102',name:'Payız balosu',date:'2026-11-08',time:'14:00',venue:'Bakı şəhəri',price:30,capacity:120,status:'Satışda',sold:26,category:'Uşaqlar',description:'Rəngarəng payız dekoru, əyləncəli proqram və unudulmaz xatirələrlə dolu bal.'},
+{id:'EV-103',name:'Sehrli xəzinənin axtarışı',date:'2026-11-15',time:'12:00',venue:'Uşaq əyləncə mərkəzi',price:18,capacity:80,status:'Satışda',sold:18,category:'Uşaqlar',description:'Tapmacalar, komanda oyunları və sehrli sürprizlərlə dolu macəra.'},
+{id:'EV-104',name:'Məktəb hekayəsi',date:'2026-09-20',time:'13:00',venue:'Tədbir zalı',price:15,capacity:70,status:'Bitib',sold:70,category:'Musiqi',description:'Kiçik səhnə ulduzlarının maraqlı çıxışları ilə ailəvi tədbir.'},
+{id:'EV-105',name:'Balaca ulduzlar konserti',date:'2026-11-22',time:'16:00',venue:'Şəhər tədbir mərkəzi',price:20,capacity:90,status:'Satışda',sold:12,category:'Musiqi',description:'Uşaqlar və ailələr üçün canlı musiqi, ritm və əyləncəli çıxışlar.'},
+{id:'EV-106',name:'Sehrli qış dünyası',date:'2026-12-06',time:'13:00',venue:'Ailəvi istirahət mərkəzi',price:25,capacity:110,status:'Satışda',sold:9,category:'Uşaqlar',description:'Qış mövsümünə özəl sehrli dekor, oyunlar və ailəvi əyləncə.'}
+],orders:[
+{id:'TF-2084',name:'Aysel Məmmədova',phone:'+994 50 *** ** 21',eventId:'EV-101',qty:2,amount:44,status:'Gözləyir',paymentStatus:'Gözləyir',receiptUrl:'demo',createdAt:Date.now()-1000*60*7,expiresAt:Date.now()+1000*60*23,tickets:[]},
+{id:'TF-2083',name:'Nigar Əliyeva',phone:'+994 55 *** ** 18',eventId:'EV-102',qty:3,amount:90,status:'Təsdiqlənib',paymentStatus:'Təsdiqlənib',receiptUrl:'demo',createdAt:Date.now()-1000*60*45,expiresAt:Date.now()-1000*60*15,tickets:['TK-2083-1','TK-2083-2','TK-2083-3']},
+{id:'TF-2082',name:'Elvin Həsənov',phone:'+994 70 *** ** 04',eventId:'EV-101',qty:1,amount:22,status:'Gözləyir',paymentStatus:'Gözləyir',receiptUrl:'demo',createdAt:Date.now()-1000*60*14,expiresAt:Date.now()+1000*60*16,tickets:[]},
+{id:'TF-2081',name:'Leyla Quliyeva',phone:'+994 51 *** ** 32',eventId:'EV-103',qty:4,amount:72,status:'Təsdiqlənib',paymentStatus:'Təsdiqlənib',receiptUrl:'demo',createdAt:Date.now()-1000*60*90,expiresAt:Date.now()-1000*60*60,tickets:['TK-2081-1','TK-2081-2','TK-2081-3','TK-2081-4']},
+{id:'TF-2080',name:'Murad İsmayılov',phone:'+994 77 *** ** 12',eventId:'EV-102',qty:2,amount:60,status:'Rədd edilib',paymentStatus:'Rədd edilib',receiptUrl:'demo',createdAt:Date.now()-1000*60*160,expiresAt:Date.now()-1000*60*130,tickets:[]}
+],expenses:[{id:'EX-1',name:'Zal icarəsi',eventId:'EV-101',amount:250,date:'2026-10-14'},{id:'EX-2',name:'Dekor və rekvizit',eventId:'EV-101',amount:85,date:'2026-10-14'}],checkedInTickets:[]};
+
+let db={events:[],orders:[],expenses:[],checkedInTickets:[]};
+window.TFTicketModel=()=>db;
+const money=n=>'₼ '+Number(n||0).toLocaleString('az-AZ',{minimumFractionDigits:2,maximumFractionDigits:2});
+const eventOf=id=>db.events.find(e=>e.id===id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const dateFmt=s=>s?new Date(s+'T12:00:00').toLocaleDateString('az-AZ',{day:'2-digit',month:'2-digit',year:'numeric'}):'—';
+const statusClass=s=>({'Təsdiqlənib':'paid','Gözləyir':'pending','Rədd edilib':'rejected','Müddəti bitib':'expired','Satışda':'paid','Qaralama':'pending','Bitib':'expired','Yerlər doludur':'rejected'}[s]||'expired');
+
+function persist(){return true}
+function toast(t){const el=document.getElementById('toast');el.textContent=t;el.style.display='block';setTimeout(()=>el.style.display='none',2800)}
+function reservationText(o){if(o.status==='Təsdiqlənib')return 'Tamamlandı';const diff=o.expiresAt-Date.now();if(diff<=0)return 'Müddət bitib';return Math.floor(diff/60000)+' dəq '+Math.floor((diff%60000)/1000)+' san'}
+function statusBadge(s){return `<span class="status ${statusClass(s)}">${esc(s)}</span>`}
+function eventCell(id){const e=eventOf(id);return e?esc(e.name):'Silinmiş tədbir'}
+function customerCell(o){const initials=(o.name||'İ').split(' ').map(x=>x[0]).slice(0,2).join('').toUpperCase();return `<div class="customer"><span class="tinyavatar">${esc(initials)}</span><div><b>${esc(o.name)}</b><span class="subtext">${esc(o.phone||o.customerEmail||o.email||'')}</span></div></div>`}
+
+function hasReceipt(o){return !!(o.receiptId || o.receiptData || o.receiptUrl || o.receiptName)}
+function receiptCell(o){
+  if(hasReceipt(o)){
+    return `<button class="linkbtn" data-view-receipt="${esc(o.id)}">Qəbzə bax →</button>`;
+  }
+  return `<span class="status rejected">Qəbz yoxdur</span>`;
+}
+
+function openReceiptViewer(orderId){
+  const o=db.orders.find(x=>x.id===orderId);
+  if(!o){toast('Sifariş tapılmadı');return}
+  const body=document.getElementById('receiptModalBody');
+  document.getElementById('receiptModalTitle').textContent='Qəbz · '+o.id;
+  let html=`<div class="receipt-meta"><b>Müştəri:</b> ${esc(o.name)}<br><b>Məbləğ:</b> ${money(o.amount)} · ${o.qty} bilet<br><b>Tədbir:</b> ${eventCell(o.eventId)}</div>`;
+  if(o.receiptData && (o.receiptData.startsWith('data:image') || o.receiptData.startsWith('data:application'))){
+    html+=`<div class="receipt-img-wrap"><img src="${o.receiptData}" alt="Ödəniş qəbzi"><div class="receipt-filename">${esc(o.receiptName||'Qəbz şəkli')}</div></div>`;
+  } else if(o.receiptName || o.receiptUrl){
+    html+=`<div class="no-receipt">Fayl adı: <b>${esc(o.receiptName||o.receiptUrl)}</b><br><br>Firebase rejimində şəkil yüklənməyib və ya PDF-dir.<br>Real versiyada Firebase Storage-dan yüklənəcək.</div>`;
+  } else {
+    html+=`<div class="no-receipt">Bu sifariş üçün qəbz hələ yüklənməyib.</div>`;
+  }
+  body.innerHTML=html;
+  document.getElementById('receiptModal').classList.add('show');
+}
+
+function closeReceiptModal(){document.getElementById('receiptModal').classList.remove('show')}
+document.getElementById('receiptModalClose').onclick=closeReceiptModal;
+document.getElementById('receiptModalClose2').onclick=closeReceiptModal;
+document.getElementById('receiptModal').addEventListener('click',e=>{if(e.target===document.getElementById('receiptModal'))closeReceiptModal()});
+
+function openOrderDetail(id){
+  const o=db.orders.find(x=>x.id===id);
+  if(!o)return;
+  const ev=eventOf(o.eventId);
+  document.getElementById('orderModalTitle').textContent='Sifariş '+o.id;
+  let html=`<div style="font-size:12px;line-height:1.8;color:var(--muted)">
+    <b style="color:var(--text)">Müştəri:</b> ${esc(o.name)}<br>
+    <b style="color:var(--text)">Telefon / Email:</b> ${esc(o.phone||o.customerEmail||o.email||'—')}<br>
+    <b style="color:var(--text)">Tədbir:</b> ${esc(ev?.name||'—')}<br>
+    <b style="color:var(--text)">Bilet sayı:</b> ${o.qty}<br>
+    <b style="color:var(--text)">Məbləğ:</b> ${money(o.amount)}<br>
+    <b style="color:var(--text)">Status:</b> ${statusBadge(o.status)}<br>
+    <b style="color:var(--text)">Rezervasiya:</b> ${reservationText(o)}<br>
+    <b style="color:var(--text)">Yaradılma:</b> ${new Date(o.createdAt).toLocaleString('az-AZ')}
+  </div>`;
+  if(hasReceipt(o)){
+    html+=`<div style="margin-top:14px"><button class="linkbtn" data-view-receipt="${esc(o.id)}">Qəbzə bax →</button></div>`;
+  }
+  document.getElementById('orderModalBody').innerHTML=html;
+  const actions=document.getElementById('orderModalActions');
+  if(o.status==='Gözləyir'){
+    actions.innerHTML=`<button class="secondary" id="orderModalClose2">Bağla</button>
+      <button class="primary" data-approve="${esc(o.id)}">Təsdiqlə</button>
+      <button class="secondary" style="color:var(--red)" data-reject="${esc(o.id)}">Rədd et</button>`;
+  } else {
+    actions.innerHTML=`<button class="secondary" id="orderModalClose2">Bağla</button>`;
+  }
+  document.getElementById('orderModal').classList.add('show');
+  document.getElementById('orderModalClose2')?.addEventListener('click',()=>document.getElementById('orderModal').classList.remove('show'));
+}
+document.getElementById('orderModalClose').onclick=()=>document.getElementById('orderModal').classList.remove('show');
+document.getElementById('orderModal').addEventListener('click',e=>{if(e.target===document.getElementById('orderModal'))document.getElementById('orderModal').classList.remove('show')});
+
+function renderDashboard(){
+  const paid=db.orders.filter(o=>o.status==='Təsdiqlənib');
+  const pending=db.orders.filter(o=>o.status==='Gözləyir'&&o.expiresAt>Date.now());
+  document.getElementById('statRevenue').textContent=money(paid.reduce((s,o)=>s+o.amount,0));
+  document.getElementById('statTickets').textContent=paid.reduce((s,o)=>s+o.qty,0);
+  document.getElementById('statPending').textContent=pending.length;
+  document.getElementById('statEvents').textContent=db.events.filter(e=>e.status==='Satışda').length;
+  document.getElementById('todayLabel').textContent=new Date().toLocaleDateString('az-AZ',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  const days=['B.e.','Ç.a.','Çər.','C.a.','Cüm.','Şən.','Baz.'];
+  const today=new Date();const vals=Array.from({length:7},(_,i)=>{const day=new Date(today);day.setDate(today.getDate()-6+i);return db.orders.filter(o=>o.status==='Təsdiqlənib'&&new Date(o.approvedAt||o.createdAt).toDateString()===day.toDateString()).reduce((sum,o)=>sum+Number(o.amount||0),0)});const maxVal=Math.max(1,...vals);
+  document.getElementById('bars').innerHTML=vals.map((v,i)=>`<div class="barcol"><div class="bar" style="height:${Math.min(100,100*v/maxVal)}%"></div><div class="bar dark" style="height:${Math.min(100,100*v/maxVal)}%"></div></div>`).join('');
+  document.getElementById('chartlabels').innerHTML=days.map(d=>`<span>${d}</span>`).join('');
+  const upcoming=db.events.filter(e=>e.status==='Satışda').sort((a,b)=>a.date.localeCompare(b.date)).slice(0,3);
+  document.getElementById('upcomingList').innerHTML=upcoming.length?upcoming.map(e=>`<div class="eventrow"><div class="eventdate"><b>${new Date(e.date+'T12:00:00').getDate()}</b><small>${new Date(e.date+'T12:00:00').toLocaleDateString('az-AZ',{month:'short'})}</small></div><div class="eventinfo"><b>${esc(e.name)}</b><small>${esc(e.venue)} · ${e.sold}/${e.capacity} bilet</small><div class="mini-progress"><i style="width:${Math.min(100,e.sold/e.capacity*100)}%"></i></div></div><div class="eventnum">${money(e.price)}</div></div>`).join(''):'<div class="empty">Aktiv tədbir yoxdur</div>';
+  document.getElementById('recentOrders').innerHTML=db.orders.slice().sort((a,b)=>b.createdAt-a.createdAt).slice(0,5).map(o=>`<tr><td><b>${esc(o.id)}</b><span class="subtext">${new Date(o.createdAt).toLocaleDateString('az-AZ')}</span></td><td>${customerCell(o)}</td><td>${eventCell(o.eventId)}</td><td><b>${money(o.amount)}</b></td><td>${statusBadge(o.status)}</td><td><button class="linkbtn" data-order="${o.id}">Bax →</button></td></tr>`).join('');
+}
+
+function renderEvents(){
+  const q=(document.getElementById('eventSearch')?.value||'').toLowerCase(),f=document.getElementById('eventStatusFilter')?.value||'all';
+  const arr=db.events.filter(e=>(e.name+' '+e.venue).toLowerCase().includes(q)&&(f==='all'||e.status===f));
+  document.getElementById('eventsTable').innerHTML=arr.length?arr.map(e=>`<tr><td><div class="customer"><span class="tinyavatar">▦</span><div><b>${esc(e.name)}</b><span class="subtext">${esc(e.id)}</span></div></div></td><td>${dateFmt(e.date)}<span class="subtext">${esc(e.time||'')}</span></td><td>${esc(e.venue||'—')}</td><td><b>${money(e.price)}</b></td><td><b>${e.sold}/${e.capacity}</b><div class="mini-progress" style="width:100px"><i style="width:${Math.min(100,e.sold/e.capacity*100)}%"></i></div></td><td>${statusBadge(Number(e.sold||0)>=Number(e.capacity||0)?'Yerlər doludur':e.status)}</td><td><button class="linkbtn" data-edit-event="${e.id}">Redaktə et</button></td></tr>`).join(''):'<tr><td colspan="7"><div class="empty">Uyğun tədbir tapılmadı</div></td></tr>';
+}
+
+function renderOrders(){
+  const q=(document.getElementById('orderSearch')?.value||'').toLowerCase(),f=document.getElementById('orderStatusFilter')?.value||'all';
+  const arr=db.orders.filter(o=>(o.id+' '+o.name+' '+eventCell(o.eventId)).toLowerCase().includes(q)&&(f==='all'||o.status===f));
+  document.getElementById('ordersTable').innerHTML=arr.length?arr.map(o=>`<tr><td><b>${esc(o.id)}</b><span class="subtext">${new Date(o.createdAt).toLocaleString('az-AZ')}</span></td><td>${customerCell(o)}</td><td>${eventCell(o.eventId)}</td><td>${o.qty}</td><td><b>${money(o.amount)}</b></td><td>${reservationText(o)}</td><td>${statusBadge(o.status)}</td><td><button class="linkbtn" data-order="${o.id}">İdarə et</button></td></tr>`).join(''):'<tr><td colspan="8"><div class="empty">Sifariş tapılmadı</div></td></tr>';
+}
+
+function renderPayments(){
+  const f=document.getElementById('paymentFilter')?.value||'all';
+  const arr=db.orders.filter(o=>(f==='all'||o.paymentStatus===f));
+  document.getElementById('paymentsTable').innerHTML=arr.length?arr.map(o=>`<tr>
+    <td><b>${esc(o.id)}</b></td>
+    <td>${customerCell(o)}</td>
+    <td><b>${money(o.amount)}</b></td>
+    <td>${receiptCell(o)}</td>
+    <td>${statusBadge(o.paymentStatus)}</td>
+    <td>${o.status==='Gözləyir'?`<button class="linkbtn" data-approve="${o.id}">Təsdiqlə</button> <button class="linkbtn" style="color:var(--red)" data-reject="${o.id}">Rədd et</button>`:'<span class="subtext">Yoxlanılıb</span>'}</td>
+  </tr>`).join(''):'<tr><td colspan="6"><div class="empty">Ödəniş yoxdur</div></td></tr>';
+}
+
+function renderTickets(){if(window.TFTicketAdmin)window.TFTicketAdmin.render();}
+
+function renderFinance(){
+  const paid=db.orders.filter(o=>o.status==='Təsdiqlənib').reduce((s,o)=>s+o.amount,0);
+  const pending=db.orders.filter(o=>o.status==='Gözləyir').reduce((s,o)=>s+o.amount,0);
+  const expenses=db.expenses.reduce((s,e)=>s+e.amount,0);
+  document.getElementById('financeGross').textContent=money(paid);
+  document.getElementById('financeExpenses').textContent=money(expenses);
+  document.getElementById('financeProfit').textContent=money(paid-expenses);
+  document.getElementById('financePending').textContent=money(pending);
+  document.getElementById('expensesTable').innerHTML=db.expenses.map(e=>`<tr><td><b>${esc(e.name)}</b></td><td>${eventCell(e.eventId)}</td><td>${money(e.amount)}</td><td>${dateFmt(e.date)}</td><td><button class="linkbtn" data-delete-expense="${e.id}">Sil</button></td></tr>`).join('')||'<tr><td colspan="5"><div class="empty">Xərc əlavə edilməyib</div></td></tr>';
+  document.getElementById('expenseEvent').innerHTML=db.events.map(e=>`<option value="${e.id}">${esc(e.name)}</option>`).join('');
+}
+
+function renderAll(){renderDashboard();renderEvents();renderOrders();renderPayments();renderTickets();renderFinance()}
+
+const pageNames={dashboard:'Dashboard',events:'Tədbirlər',orders:'Sifarişlər',payments:'Ödəniş yoxlaması',tickets:'Biletlər',scan:'QR yoxlama',finance:'Maliyyə',settings:'Parametrlər'};
+function go(page){
+  document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id==='page-'+page));
+  document.querySelectorAll('.nav button[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===page));
+  document.getElementById('pageTitle').textContent=pageNames[page]||'Dashboard';
+  document.getElementById('crumb').textContent=pageNames[page]||'Dashboard';
+  document.getElementById('topAdd').style.display=page==='events'?'none':'inline-block';
+  if(page==='events')renderEvents();
+  if(page==='orders')renderOrders();
+  if(page==='payments')renderPayments();
+  if(page==='tickets')renderTickets();
+}
+
+document.addEventListener('click',e=>{
+  const pageButton=e.target.closest('.nav button[data-page]');
+  if(pageButton)go(pageButton.dataset.page);
+  const g=e.target.closest('[data-goto]');
+  if(g)go(g.dataset.goto);
+  const order=e.target.closest('[data-order]');
+  if(order)openOrderDetail(order.dataset.order);
+  const viewR=e.target.closest('[data-view-receipt]');
+  if(viewR){window.openReceiptViewer(viewR.dataset.viewReceipt);return}
+  const ap=e.target.closest('[data-approve]');
+  if(ap){approveOrder(ap.dataset.approve);document.getElementById('orderModal').classList.remove('show')}
+  const rj=e.target.closest('[data-reject]');
+  if(rj){rejectOrder(rj.dataset.reject);document.getElementById('orderModal').classList.remove('show')}
+  const ed=e.target.closest('[data-edit-event]');
+  if(ed)editEvent(ed.dataset.editEvent);
+  const de=e.target.closest('[data-delete-expense]');
+  if(de){window.TFAdmin.deleteExpense(de.dataset.deleteExpense).catch(e=>toast(window.TFAdmin.error(e)))}
+
+});
+
+const modal=document.getElementById('modalback');
+function openModal(){document.querySelector('#eventForm .media-section').open=true;document.getElementById('eventForm').reset();document.getElementById('modalTitle').textContent='Yeni tədbir';document.getElementById('eventForm').dataset.editId='';modal.classList.add('show')}
+function closeModal(){modal.classList.remove('show')}
+document.getElementById('topAdd').onclick=openModal;
+document.getElementById('addEvent').onclick=openModal;
+document.getElementById('modalClose').onclick=closeModal;
+document.getElementById('cancelModal').onclick=closeModal;
+modal.addEventListener('click',e=>{if(e.target===modal)closeModal()});
+
+function editEvent(id){
+  const e=db.events.find(x=>x.id===id);if(!e)return;
+  const f=document.getElementById('eventForm');f.reset();
+  Object.entries(e).forEach(([k,v])=>{if(f.elements[k]&&f.elements[k].type!=='file')f.elements[k].value=v});
+  f.dataset.editId=id;document.querySelector('#eventForm .media-section').open=true;document.getElementById('modalTitle').textContent='Tədbiri redaktə et';modal.classList.add('show');
+}
+
+async function tfReadImage(file){
+ if(!file||!file.size)return null;
+ if(!['image/jpeg','image/png','image/webp'].includes(file.type))throw Error('Yalnız JPG, PNG və WebP şəkilləri qəbul olunur');
+ if(file.size>8*1024*1024)throw Error('Şəkil 8 MB-dan böyük ola bilməz.');
+ const bitmap=await createImageBitmap(file);
+ const scale=Math.min(1,1400/bitmap.width,900/bitmap.height);
+ const canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round(bitmap.width*scale));canvas.height=Math.max(1,Math.round(bitmap.height*scale));
+ canvas.getContext('2d').drawImage(bitmap,0,0,canvas.width,canvas.height);bitmap.close();
+ let quality=.82,result=canvas.toDataURL('image/jpeg',quality);
+ while(result.length>520000&&quality>.36){quality-=.1;result=canvas.toDataURL('image/jpeg',quality)}
+ if(result.length>650000)throw Error('Şəkil demo yaddaşına yerləşmir. Daha sadə şəkil seçin.');
+ return result;
+}
+document.getElementById('eventForm').addEventListener('submit',async e=>{e.preventDefault();const f=e.currentTarget,d=Object.fromEntries(new FormData(f).entries());d.price=Number(d.price);d.capacity=Number(d.capacity);try{await window.TFAdmin.saveEvent(d,f.dataset.editId,f);closeModal();toast('Tədbir Firestore-da yadda saxlandı')}catch(err){alert(window.TFAdmin.error(err))}});
+async function approveOrder(id){
+  if(!confirm('Ödənişi bank hesabında şəxsən yoxladığını təsdiqləyirsən?'))return;
+  try {
+    const ids=await window.TFAdmin.approve(id);
+    toast('Ödəniş və '+ids.length+' QR bilet birlikdə təsdiqləndi.');
+  }catch(e){alert(window.TFAdmin?.error?.(e)||e.message)}
+}
+async function rejectOrder(id){if(!confirm('Ödənişi rədd etmək istəyirsən?'))return;try{await window.TFAdmin.reject(id);toast('Sifariş rədd edildi')}catch(e){alert(window.TFAdmin.error(e))}}
+const exModal=document.getElementById('expenseModal');
+document.getElementById('addExpense').onclick=()=>{document.getElementById('expenseForm').reset();document.querySelector('#expenseForm [name=date]').value=new Date().toISOString().slice(0,10);renderFinance();exModal.classList.add('show')};
+function closeExpense(){exModal.classList.remove('show')}
+document.getElementById('expenseClose').onclick=closeExpense;
+document.getElementById('expenseCancel').onclick=closeExpense;
+exModal.addEventListener('click',e=>{if(e.target===exModal)closeExpense()});
+document.getElementById('expenseForm').addEventListener('submit',async e=>{e.preventDefault();const d=Object.fromEntries(new FormData(e.currentTarget).entries());try{await window.TFAdmin.addExpense(d);closeExpense();toast('Xərc əlavə edildi')}catch(err){toast(window.TFAdmin.error(err))}});
+['eventSearch','eventStatusFilter'].forEach(id=>document.getElementById(id).addEventListener('input',renderEvents));
+['orderSearch','orderStatusFilter'].forEach(id=>document.getElementById(id).addEventListener('input',renderOrders));
+document.getElementById('paymentFilter').addEventListener('change',renderPayments);
+document.getElementById('ticketSearch').addEventListener('input',renderTickets);
+document.getElementById('globalSearch').addEventListener('input',e=>{const q=e.target.value.trim();if(q){go('orders');document.getElementById('orderSearch').value=q;renderOrders()}});
+document.getElementById('chartRange').addEventListener('change',()=>toast('Demo qrafik göstərilir. Real statistika Firestore qoşulduqdan sonra hesablanacaq.'));
+
+renderAll();
+setInterval(()=>{renderOrders();renderPayments();},1500);
+</script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script defer src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<script defer src="tf-ticket-renderer.js"></script>
+<script defer src="tf-ticket-admin.js"></script>
+<script type="module" src="tf-admin-cloud.js"></script><script>window.addEventListener("error", e=>{if(!window.TFAdmin){const n=document.getElementById("loginError");n.textContent="Firebase kodu yüklənmədi: "+(e.message||"modul xətası");n.style.display="block"}});window.addEventListener("unhandledrejection",e=>{const n=document.getElementById("loginError");if(!document.body.classList.contains("authenticated")){n.textContent="Bağlantı xətası: "+(e.reason?.message||String(e.reason));n.style.display="block"}});</script><script>document.getElementById('paymentCardForm').addEventListener('submit',async e=>{e.preventDefault();let d=new FormData(e.target);try{await window.TFAdmin.card(String(d.get('cardNumber')),String(d.get('cardHolder')));toast('Kart məlumatları saxlanıldı')}catch(err){toast(window.TFAdmin.error(err))}})</script>
+<script>
+(function(){
+ const toggle=document.getElementById('tfMobileMenuToggle');
+ const backdrop=document.getElementById('tfMobileBackdrop');
+ const sidebar=document.querySelector('.sidebar');
+ if(!toggle||!backdrop||!sidebar)return;
+ const setOpen=open=>{
+   document.body.classList.toggle('tf-mobile-open',open);
+   toggle.setAttribute('aria-expanded',String(open));
+   toggle.setAttribute('aria-label',open?'Menyunu bağla':'Menyunu aç');
+   toggle.textContent=open?'✕':'☰';
+   backdrop.setAttribute('aria-hidden',String(!open));
+ };
+ toggle.addEventListener('click',()=>setOpen(!document.body.classList.contains('tf-mobile-open')));
+ backdrop.addEventListener('click',()=>setOpen(false));
+ sidebar.addEventListener('click',e=>{if(e.target.closest('[data-page],[data-goto]'))setOpen(false)});
+ document.addEventListener('keydown',e=>{if(e.key==='Escape')setOpen(false)});
+ window.addEventListener('resize',()=>{if(innerWidth>760)setOpen(false)});
+})();
+</script>
+</body>
+</html>

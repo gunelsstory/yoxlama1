@@ -1,0 +1,23 @@
+// Bu, mövcud Firestore Rules V2 match /databases/{database}/documents
+// daxilində əlavə olunacaq qaydalardır. Digər qaydaları silməyin.
+// DİQQƏT: Firestore allow qaydaları OR ilə birləşir! Daha geniş bir
+// catch-all allow write varsa, bu fragment bilet kolleksiyasını qoruya bilməz.
+function isActiveTicketAdmin() {
+  return request.auth != null &&
+    exists(/databases/$(database)/documents/tfAdmins/$(request.auth.uid)) &&
+    get(/databases/$(database)/documents/tfAdmins/$(request.auth.uid)).data.active == true;
+}
+match /tickets/{ticketId} {
+  allow read: if isActiveTicketAdmin() ||
+    (request.auth != null && resource.data.buyerUid == request.auth.uid);
+  allow create, update, delete: if isActiveTicketAdmin();
+}
+match /ticketTemplates/{templateId} {
+  allow read: if request.auth != null;
+  allow create, update, delete: if isActiveTicketAdmin();
+}
+match /tfCheckins/{ticketId} {
+  allow read, create, update, delete: if isActiveTicketAdmin();
+}
+// tfOrders və tfEvents üzərində admin-yazma məhdudiyyətinin də
+// mövcud olması vacibdir. Bunların qaydaları bu fragmentdə yoxdur.
