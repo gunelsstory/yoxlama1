@@ -513,5 +513,172 @@ ticketTableBody.addEventListener('click',async event=>{
   }
 },true);
 </script>
+<!-- Only the Orders table: admin-only deletion of pending and confirmed orders. -->
+<style>
+#ordersTable .tf-order-delete-btn{display:inline-flex;align-items:center;justify-content:center;margin-left:8px;padding:6px 10px;border:1px solid #f3c5ce;border-radius:7px;background:#fff2f4;color:#bd3549;font-size:10px;font-weight:750;white-space:nowrap;vertical-align:middle;cursor:pointer}
+#ordersTable .tf-order-delete-btn:hover{background:#ffe6eb}
+#ordersTable .tf-order-delete-btn:disabled{opacity:.55;cursor:wait}
+@media(max-width:760px){#ordersTable .tf-order-delete-btn{padding:7px 10px;min-height:30px}}
+</style>
+<script type="module">
+import {auth,store,ref,getDoc,getDocs,collection,query,where,runTransaction} from './tf-core.js';
+
+// All existing renderers, approval logic, payment checks and ticket actions remain unchanged.
+// Enhance only eligible order rows after the existing orders renderer refreshes them.
+const ordersTbody=document.getElementById('ordersTable');
+const deletingOrders=new Set();
+const orderIdIsSafe=id=>/^[A-Za-z0-9_-]{4,120}$/.test(String(id||''));
+const normalizedStatus=s=>String(s||'').replace(/\s+/g,' ').trim().toLocaleLowerCase('az-AZ');
+const isDeletableStatus=s=>s==='Gözləyir'||s==='Təsdiqlənib';
+function orderIdFromRow(row){return String(row.cells[0]?.querySelector('b')?.textContent||'').trim();}
+function eligibleRow(row){return ['gözləyir','təsdiqlənib'].includes(normalizedStatus(row.cells[6]?.textContent));}
+function enhanceOrdersTable(){
+  for(const row of ordersTbody.rows){
+    const actionCell=row.cells[7];
+    if(!actionCell)continue;
+    let button=actionCell.querySelector('.tf-order-delete-btn');
+    const id=orderIdFromRow(row);
+    if(!eligibleRow(row)||!orderIdIsSafe(id)){
+      button?.remove();
+      continue;
+    }
+    if(!button){
+      button=document.createElement('button');
+      button.type='button';
+      button.className='tf-order-delete-btn';
+      button.textContent='Sil';
+      button.setAttribute('aria-label',id+' sifarişini sil');
+      actionCell.appendChild(button);
+    }
+    button.dataset.orderDelete=id;
+    button.disabled=deletingOrders.has(id);
+    const label=deletingOrders.has(id)?'Silinir...':'Sil';
+    if(button.textContent!==label)button.textContent=label;
+  }
+}
+let scheduled=false;
+const ordersObserver=new MutationObserver(()=>{
+  if(scheduled)return;
+  scheduled=true;
+  queueMicrotask(()=>{scheduled=false;enhanceOrdersTable();});
+});
+ordersObserver.observe(ordersTbody,{childList:true,subtree:true});
+enhanceOrdersTable();
+
+// Reserve holds, purchased seats, associated QR tickets, check-ins, and receipt
+// must be reconciled atomically with deletion of their parent order.
+async function removeOrderSafely(orderId){
+  if(!orderIdIsSafe(orderId))throw Error('Sifariş nömrəsi yanlışdır.');
+  const uid=auth.currentUser?.uid;
+  if(!uid)throw Error('Əvvəlcə admin hesabına daxil olun.');
+  const admin=await getDoc(ref('tfAdmins',uid));
+  if(!admin.exists()||admin.data().active!==true)throw Error('Aktiv admin icazəsi yoxdur.');
+
+  const or=ref('tfOrders',orderId);
+  const preflight=await getDoc(or);
+  if(!preflight.exists())throw Error('Sifariş artıq silinib və ya mövcud deyil.');
+  const initial=preflight.data();
+  if(!isDeletableStatus(initial.status))throw Error('Bu statusdakı sifariş silinə bilməz.');
+  if(!orderIdIsSafe(initial.eventId))throw Error('Sifarişin tədbir identifikatoru etibarsızdır.');
+
+  const ticketIds=new Set();
+  if(initial.status==='Təsdiqlənib'){
+    if(Array.isArray(initial.tickets)){
+      for(const ticketId of initial.tickets){
+        if(!orderIdIsSafe(ticketId))throw Error('Sifarişə bağlı bilet ID-si yanlışdır.');
+        ticketIds.add(ticketId);
+      }
+    }
+    const count=Number(initial.qty);
+    if(!Number.isSafeInteger(count)||count<1||count>100)throw Error('Sifarişdə bilet sayı yanlışdır.');
+    // Handles existing v3 tickets as well as older unpadded ticket numbers.
+    for(let i=1;i<=count;i++){
+      ticketIds.add('TK-'+orderId+'-'+String(i).padStart(2,'0'));
+      ticketIds.add('TK-'+orderId+'-'+i);
+    }
+    // Covers existing deployments which used custom Firestore ticket IDs.
+    const ticketMatches=await getDocs(query(collection(store,'tickets'),where('orderId','==',orderId)));
+    for(const t of ticketMatches.docs){
+      if(!orderIdIsSafe(t.id))throw Error('Bilet identifikatoru yanlışdır.');
+      ticketIds.add(t.id);
+    }
+  }
+  if(ticketIds.size>220)throw Error('Bu sifarişdə gözlənilməyən sayda bilet var. Əməliyyat dayandırıldı.');
+  const ticketRefs=[...ticketIds].map(id=>ref('tickets',id));
+  const checkinRefs=[...ticketIds].map(id=>ref('tfCheckins',id));
+  const receiptRef=ref('tfReceipts',orderId);
+  const eventRef=ref('tfEvents',initial.eventId);
+
+  // Firestore SDK requires all reads before the first transaction write.
+  await runTransaction(store,async tx=>{
+    const [orderSnap,eventSnap,receiptSnap,...related]=await Promise.all([
+      tx.get(or),tx.get(eventRef),tx.get(receiptRef),
+      ...ticketRefs.map(r=>tx.get(r)),...checkinRefs.map(r=>tx.get(r))
+    ]);
+    if(!orderSnap.exists())throw Error('Sifariş artıq silinib.');
+    const order=orderSnap.data();
+    if(!isDeletableStatus(order.status))throw Error('Sifariş statusu dəyişdiyi üçün silinmə dayandırıldı.');
+    if(order.status!==initial.status||order.eventId!==initial.eventId)
+      throw Error('Sifariş dəyişib. Yenidən yoxlayıb silin.');
+    if(order.status==='Təsdiqlənib'&&Array.isArray(order.tickets)&&order.tickets.some(id=>!ticketIds.has(id)))
+      throw Error('Sifarişin bilet siyahısı dəyişib. Yenidən cəhd edin.');
+    const linkedTickets=related.slice(0,ticketRefs.length);
+    const linkedCheckins=related.slice(ticketRefs.length);
+    for(const snap of linkedTickets){
+      if(snap.exists()&&snap.data().orderId!==orderId)
+        throw Error('Başqa sifarişə aid bilet aşkarlanıb. Təhlükəsizlik üçün silinmədi.');
+    }
+    for(const snap of linkedCheckins){
+      if(snap.exists()&&snap.data().orderId&&snap.data().orderId!==orderId)
+        throw Error('Başqa sifarişə aid giriş qeydi aşkarlanıb. Silinmədi.');
+    }
+    if(eventSnap.exists()){
+      const event=eventSnap.data();
+      const holds={...(event.holds||{})};
+      const hadHold=Object.prototype.hasOwnProperty.call(holds,orderId);
+      delete holds[orderId];
+      if(order.status==='Gözləyir'){
+        if(hadHold)tx.update(eventRef,{holds});
+      }else{
+        const sold=Number(event.sold||0),qty=Number(order.qty);
+        if(!Number.isFinite(sold)||!Number.isSafeInteger(qty)||qty<1)
+          throw Error('Tədbir üzrə satış sayı düzgün deyil. Silinmədi.');
+        tx.update(eventRef,{sold:Math.max(0,sold-qty),holds});
+      }
+    }
+    for(const snap of linkedTickets)if(snap.exists())tx.delete(snap.ref);
+    for(const snap of linkedCheckins)if(snap.exists())tx.delete(snap.ref);
+    if(receiptSnap.exists())tx.delete(receiptRef);
+    tx.delete(or);
+  });
+}
+
+ordersTbody.addEventListener('click',async e=>{
+  const button=e.target.closest('.tf-order-delete-btn');
+  if(!button||!ordersTbody.contains(button))return;
+  e.preventDefault();
+  e.stopPropagation();
+  const row=button.closest('tr');
+  if(!row||!eligibleRow(row))return;
+  const id=button.dataset.orderDelete;
+  if(!orderIdIsSafe(id)||deletingOrders.has(id))return;
+  const message=id+' nömrəli sifarişi həmişəlik silmək istəyirsiniz?\n\n'+
+    'Gözləyən sifarişin rezervasiyası azad ediləcək. Təsdiqlənmiş sifarişin QR biletləri və giriş qeydləri silinəcək, satılmış yerlərin sayı yenilənəcək. Ödəniş qəbzi də silinəcək.\n\n'+
+    'Bu əməliyyat geri qaytarılmır.';
+  if(!confirm(message))return;
+  deletingOrders.add(id);enhanceOrdersTable();
+  try{
+    await removeOrderSafely(id);
+    if(typeof window.toast==='function')window.toast('Sifariş və əlaqəli qeydlər silindi.');
+    else alert('Sifariş silindi.');
+    // Existing Firestore listeners update orders, tickets, stats and mobile clients.
+  }catch(err){
+    alert('Sifarişi silmək mümkün olmadı: '+(window.TFAdmin?.error?.(err)||err?.message||String(err)));
+  }finally{
+    deletingOrders.delete(id);
+    enhanceOrdersTable();
+  }
+},true);
+</script>
 </body>
 </html>
