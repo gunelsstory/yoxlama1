@@ -420,5 +420,98 @@ setInterval(()=>{renderOrders();renderPayments();},1500);
  window.addEventListener('resize',()=>{if(innerWidth>760)setOpen(false)});
 })();
 </script>
+<!-- Only the Tickets table: show/delete tickets with approved or entered status. -->
+<style>
+#ticketsTable .tf-ticket-delete-btn{display:inline-flex;align-items:center;justify-content:center;margin-left:8px;padding:6px 10px;border:1px solid #f3c5ce;border-radius:7px;background:#fff2f4;color:#bd3549;font-size:10px;font-weight:750;white-space:nowrap;vertical-align:middle;cursor:pointer}
+#ticketsTable .tf-ticket-delete-btn:hover{background:#ffe6eb}
+#ticketsTable .tf-ticket-delete-btn:disabled{opacity:.55;cursor:wait}
+</style>
+<script type="module">
+import {auth,store,ref,getDoc,getDocs,deleteDoc,collection,query,where} from './tf-core.js';
+
+// The existing tf-ticket-admin.js remains responsible for rendering and live updates.
+// It replaces table rows during Firestore updates, so enhance each new row only once.
+const ticketTableBody=document.getElementById('ticketsTable');
+const normalizeStatus=value=>String(value||'').replace(/\s+/g,' ').trim().toLocaleLowerCase('az-AZ');
+function mayDeleteTicket(row){
+  const status=normalizeStatus(row.cells[4]?.textContent);
+  return status.includes('təsdiqlənib') || status.includes('giriş edilib') || status==='aktiv';
+}
+function addTicketDeleteButtons(){
+  for(const row of ticketTableBody.rows){
+    const cell=row.cells[5];
+    if(!cell)continue;
+    const existing=cell.querySelector('.tf-ticket-delete-btn');
+    if(!mayDeleteTicket(row)){
+      if(existing)existing.remove();
+      continue;
+    }
+    if(existing)continue;
+    const button=document.createElement('button');
+    button.type='button';
+    button.className='tf-ticket-delete-btn';
+    button.textContent='Sil';
+    button.setAttribute('aria-label','Bileti sil');
+    cell.appendChild(button);
+  }
+}
+let updateQueued=false;
+const ticketTableObserver=new MutationObserver(()=>{
+  if(updateQueued)return;
+  updateQueued=true;
+  queueMicrotask(()=>{updateQueued=false;addTicketDeleteButtons();});
+});
+ticketTableObserver.observe(ticketTableBody,{childList:true,subtree:true,characterData:true});
+addTicketDeleteButtons();
+
+// Usually the visible ticket number is also the tickets document ID. A safe
+// field lookup supports installations using generated Firestore document IDs.
+async function ticketDocument(ticketCode){
+  const direct=ref('tickets',ticketCode);
+  if((await getDoc(direct)).exists())return direct;
+  const matches=new Map();
+  for(const key of ['ticketId','ticketCode','code','serial']){
+    const result=await getDocs(query(collection(store,'tickets'),where(key,'==',ticketCode)));
+    for(const docSnap of result.docs)matches.set(docSnap.id,docSnap.ref);
+    if(matches.size>1)throw Error('Bu bilet nömrəsi bir neçə qeydə uyğundur. Təhlükəsizlik üçün silinmədi.');
+  }
+  if(matches.size!==1)throw Error('Bilet Firestore bazasında tapılmadı.');
+  return [...matches.values()][0];
+}
+
+ticketTableBody.addEventListener('click',async event=>{
+  const button=event.target.closest('.tf-ticket-delete-btn');
+  if(!button||!ticketTableBody.contains(button))return;
+  event.preventDefault();
+  event.stopPropagation();
+  if(button.disabled)return;
+  const row=button.closest('tr');
+  if(!row||!mayDeleteTicket(row))return;
+  const ticketCode=String(row.cells[0]?.querySelector('b')?.textContent||row.cells[0]?.textContent||'').trim();
+  if(!/^[A-Za-z0-9_-]{3,180}$/.test(ticketCode)){
+    alert('Bilet nömrəsini müəyyən etmək mümkün olmadı.');
+    return;
+  }
+  if(!confirm(ticketCode+' nömrəli bileti silmək istəyirsiniz? Sifariş məlumatları dəyişməyəcək.'))return;
+  button.disabled=true;
+  button.textContent='Silinir...';
+  try{
+    if(!auth.currentUser)throw Error('Bileti silmək üçün admin hesabına daxil olun.');
+    const admin=await getDoc(ref('tfAdmins',auth.currentUser.uid));
+    if(!admin.exists())throw Error('Bu əməliyyat üçün admin icazəsi yoxdur.');
+    const docRef=await ticketDocument(ticketCode);
+    await deleteDoc(docRef);
+    // The existing Firestore listener will refresh the table on every device.
+    row.remove();
+    if(typeof window.toast==='function')window.toast('Bilet silindi.');
+    else alert('Bilet silindi.');
+  }catch(error){
+    alert('Bileti silmək mümkün olmadı: '+(error?.message||String(error)));
+  }finally{
+    button.disabled=false;
+    button.textContent='Sil';
+  }
+},true);
+</script>
 </body>
 </html>
